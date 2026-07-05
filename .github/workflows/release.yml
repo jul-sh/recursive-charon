@@ -38,7 +38,10 @@ jobs:
             exit 1
           fi
           cd "$FONTS_DIR"
-          for dir in Variable_TTF Static_OTF Static_TTF; do
+          # Only publish the TrueType fonts. Static_OTF is intentionally
+          # omitted: only the TTFs are extended with Iosevka Charon glyph
+          # coverage (Iosevka Charon ships TrueType only).
+          for dir in Variable_TTF Static_TTF; do
             if [ -d "$dir" ]; then
               zip -r "../${dir}.zip" "$dir"
             fi

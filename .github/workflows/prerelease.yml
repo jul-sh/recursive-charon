@@ -46,10 +46,13 @@ jobs:
 
           FOUND=""
 
-          # Only package Recursive font directories
-          for dir_name in Variable_TTF Static_OTF Static_TTF; do
+          # Only package the TrueType fonts. Static_OTF is intentionally not
+          # published: only the TTFs are extended with Iosevka Charon glyph
+          # coverage (Iosevka Charon ships TrueType only), so shipping the
+          # OTFs would mean releasing fonts with far narrower coverage.
+          for dir_name in Variable_TTF Static_TTF; do
             dir="$FONTS_DIR/$dir_name"
-            if [ -d "$dir" ] && find "$dir" -maxdepth 1 \( -name '*.ttf' -o -name '*.otf' \) | grep -q .; then
+            if [ -d "$dir" ] && find "$dir" -maxdepth 1 -name '*.ttf' | grep -q .; then
               zip -r "${dir_name}.zip" "$dir" -x "*/makeotf_output.txt" "*/autohint_output.txt"
               FOUND="yes"
             fi
