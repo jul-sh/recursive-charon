@@ -4,6 +4,7 @@ from pathlib import Path
 from build_files import buildFiles, getFolders
 from build_variable import build_variable
 from build_static import build_static
+from extend_charon import extend_build
 from utils import getFiles, makeWOFF
 
 if __name__ == "__main__":
@@ -26,6 +27,8 @@ if __name__ == "__main__":
                         help="Build variable font")
     parser.add_argument("-s", "--static", action="store_true",
                         help="Build static fonts")
+    parser.add_argument("-e", "--extend", action="store_true",
+                        help="Extend fonts with Iosevka Charon glyph coverage")
     parser.add_argument("-w", "--woff", action="store_true",
                         help="Make WOFF & WOFF2 of generated fonts")
     parser.add_argument("-p", "--pync", action="store_true",
@@ -57,6 +60,7 @@ if __name__ == "__main__":
         args.files = True
         args.variable = True
         args.static = True
+        args.extend = True
         args.woff = True
 
     if args.files:
@@ -84,6 +88,16 @@ if __name__ == "__main__":
         build_static(files["cff"], files["ttf"], out)
         if args.pync:
             pync.notify('Static files built!', title='Recursive Build')
+
+    if args.extend:
+        # Fill glyph-coverage gaps with Iosevka Charon. Run after variable and
+        # static TTFs exist but before WOFFs, so the webfonts carry the
+        # extended coverage too. Only .ttf fonts are extended (Iosevka Charon
+        # ships TrueType only); static .otf fonts are left as-is.
+        extend_build(out)
+        if args.pync:
+            pync.notify('Fonts extended with Iosevka Charon!',
+                        title='Recursive Build')
 
     if args.woff:
         for path in outPaths:

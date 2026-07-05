@@ -1,6 +1,14 @@
 # Recursive Charon
 
-A customized fork of [Recursive Sans & Mono](https://github.com/arrowtype/recursive) adapted to match the proportions of Iosevka Charon.
+A customized fork of [Recursive Sans & Mono](https://github.com/arrowtype/recursive) adapted to match the proportions of Iosevka Charon — and **extended far past what the base Recursive font offers** by borrowing glyph coverage from [Iosevka Charon](https://github.com/jul-sh/iosevka-charon).
+
+## Extended character coverage
+
+The upstream Recursive font covers only around 745 codepoints — essentially Latin plus a handful of symbols. Recursive Charon extends this to the full ~7,500-codepoint repertoire of [Iosevka Charon](https://github.com/jul-sh/iosevka-charon): extended Latin, Greek, Cyrillic, rich punctuation, arrows, and technical symbols.
+
+The rule is simple: **wherever Recursive Charon draws a character, its own glyph is used; every character it lacks is filled in from Iosevka Charon.** Because both families are TrueType at 1000 units-per-em (and both mono variants share a 500-unit cell), glyphs are borrowed verbatim, with no scaling. Borrowed accented and composite letters are even rebuilt on top of Recursive's own base shapes where possible, so they stay visually on-brand.
+
+This happens automatically at build time — see [`mastering/extend_charon.py`](mastering/extend_charon.py). To pull a newer Iosevka Charon release, bump the single `IOSEVKA_CHARON_VERSION` constant at the top of that file to a tag from the [Iosevka Charon releases](https://github.com/jul-sh/iosevka-charon/releases) and rebuild; the matching release is downloaded and cached automatically.
 
 ## What changed
 
